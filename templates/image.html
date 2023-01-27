@@ -1,0 +1,107 @@
+
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="generator" content="">
+    <title>Galery</title>
+
+    <link rel="canonical" href="">
+
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+
+  </head>
+  <body>
+
+<header>
+  <div class="navbar navbar-dark bg-dark shadow-sm">
+    <div class="container">
+      <a href="{% url 'index' %}" class="navbar-brand d-flex align-items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <strong>Home</strong>
+      </a>
+      <a href="{% url 'image-category' category.slug %}">Back to {{category.title}}</a>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+    <div class="col-lg-6 col-md-8 mx-auto" style="border: 2px solid black">
+  <section class="py-5 text-center container">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-light">{{image.title}}</h1>
+        <div class="card shadow-sm">
+            <img src="{{image.image.url}}" alt="{{image.altText}}">
+            <div class="card-body">
+                <p class="card-text">{{image.description}}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">Created: {{image.created}}</small>
+                    <small class="text-muted">Comments count: {{comments.count}}</small>
+                </div>
+            </div>
+        </div>
+      </div>
+  </section>
+    <hr>
+    <section class="py-5 text-center container">
+        <h1 class="fw-light">Add a comment!</h1>
+    <div class="col-lg-6 col-md-8 mx-auto">
+        <form action="{% url 'image-view' slug1=category.slug slug2=image.slug %}" method="post">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <input type="submit" value="Submit" >
+        </form>
+    </div>
+    </section>
+    <hr>
+    <section class="py-5 text-center container">
+        <br>
+            {% if comments|length > 0 %}
+            {% for comment in comments %}
+                <div class="comments" style="padding: 2px; border: 1px solid black;">
+                    <p class="font-weight-bold">
+                        {{ comment.name }}
+                        <span class=" text-muted font-weight-normal">
+                            {{ comment.created_on }}
+                        </span>
+                    </p>
+                    {{ comment.body | linebreaks }}
+                </div>
+                <br>
+                {% endfor %}
+                {% else %}
+                <h1 class="fw-light">There is no comments yet! Use form above to add a comment!</h1>
+                {% endif %}
+        </div>
+    </section>
+        </div>
+</main>
+  </body>
+</html>
